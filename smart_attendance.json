@@ -1,0 +1,971 @@
+[
+    {
+        "id": "6b13ac8835e1a8dd",
+        "type": "tab",
+        "label": "db_mysql",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "1845049c0e0b030c",
+        "type": "group",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Register new staff",
+        "style": {
+            "stroke": "#000000",
+            "fill": "#ffbfbf",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "83a42ecb7093007c",
+            "04ac2c5ec192a876",
+            "ff0699e253647a60",
+            "6cabb21c944cbf4d",
+            "0ba040695f5c0e89",
+            "c34aee0bfb8dd42b",
+            "e6b0093e50e08ffe"
+        ],
+        "x": 34,
+        "y": 39,
+        "w": 952,
+        "h": 162
+    },
+    {
+        "id": "8b744031c4387e1c",
+        "type": "group",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Scan in",
+        "style": {
+            "stroke": "#000000",
+            "fill": "#ffefbf",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "fc624bd440cbcd43",
+            "a31ef3ec9be8b217",
+            "f39a4eebc3301c47",
+            "f3adab6956141cf0",
+            "9ecf9f4bf80e810b",
+            "4fdffab18ceef923",
+            "3f7c1f3c6ebb6dc4",
+            "2693245c188115bb",
+            "6cfb32b6ac44195b",
+            "e702800bd9cff3aa",
+            "83e08dae6465044e",
+            "b2be051e9eb366d4",
+            "8f8ec9d703e71d94"
+        ],
+        "x": 34,
+        "y": 219,
+        "w": 1332,
+        "h": 182
+    },
+    {
+        "id": "bb6a5251438f4241",
+        "type": "group",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Scan out",
+        "style": {
+            "stroke": "#000000",
+            "fill": "#ffefbf",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "c0d34e379f1190f4",
+            "284b0c1b3824a6a7",
+            "2d9b65ee49579e88",
+            "120edc751dd63376",
+            "6d141c44d71fcfc7",
+            "cbc0aeab6c4396e5",
+            "17854ef3ae2b11bf",
+            "ff859b1a28f78936",
+            "7e7188419140bb7e",
+            "1f891882c1d1c4b4",
+            "77b2094b6f18c8d7",
+            "16fefab51341220e",
+            "3580f2a67c73ed32"
+        ],
+        "x": 34,
+        "y": 419,
+        "w": 1262,
+        "h": 122
+    },
+    {
+        "id": "83a42ecb7093007c",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "name": "New staff info",
+        "func": "// Get index number or initialize it\nvar index_no = flow.get(\"db_index_no\");\n\nif (index_no == null) {\n    index_no = 1;\n} else {\n    index_no += 1;\n}\n\nflow.set(\"db_index_no\", index_no);\n\n// Get UID from flow context\nvar new_uid = flow.get(\"new_uid\");\n\n// Get form data\nvar comp = msg.payload.comp;\nvar name = msg.payload.name;\nvar email = msg.payload.email;\nvar ic = msg.payload.ic;\nvar staff_id = msg.payload.staff_id;\nvar license_d = msg.payload.license_d;\nvar license_b2 = msg.payload.license_b2;\nvar phone = msg.payload.phone;\n\n// Build SQL query\nmsg.topic =\n    \"INSERT INTO `database`(`index_no`, `comp`, `name`, `email`, `ic`, `staff_id`, `license_d`, `license_b2`, `phone`, `uid`) \" +\n    \"VALUES (\"+index_no+\",'\"+comp+\"','\"+name+\"','\"+email+\"','\"+ic+\"','\"+staff_id+\"',\"+license_d+\",\"+license_b2+\",'\"+phone+\"','\"+new_uid+\"')\";\n\n// Clear UID after use to unlock next scan\n//flow.set(\"uid\", null);\nflow.set(\"registrationInProgress\", false);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 80,
+        "wires": [
+            [
+                "0ba040695f5c0e89"
+            ]
+        ]
+    },
+    {
+        "id": "04ac2c5ec192a876",
+        "type": "ui_form",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "name": "New Staff Form",
+        "label": "New Staff Form",
+        "group": "5009149a1ac8863f",
+        "order": 1,
+        "width": 18,
+        "height": 1,
+        "options": [
+            {
+                "label": "Company",
+                "value": "comp",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Name",
+                "value": "name",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "E-Mail",
+                "value": "email",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "IC",
+                "value": "ic",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Staff ID",
+                "value": "staff_id",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Car License",
+                "value": "license_d",
+                "type": "checkbox",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Motor License",
+                "value": "license_b2",
+                "type": "checkbox",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Phone Number",
+                "value": "phone",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "comp": "",
+            "name": "",
+            "email": "",
+            "ic": "",
+            "staff_id": "",
+            "license_d": false,
+            "license_b2": false,
+            "phone": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "cancel",
+        "topic": "payload",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 180,
+        "y": 80,
+        "wires": [
+            [
+                "83a42ecb7093007c"
+            ]
+        ]
+    },
+    {
+        "id": "ff0699e253647a60",
+        "type": "inject",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "name": "Dummy UID",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "SA2323",
+        "payloadType": "str",
+        "x": 190,
+        "y": 160,
+        "wires": [
+            [
+                "6cabb21c944cbf4d"
+            ]
+        ]
+    },
+    {
+        "id": "6cabb21c944cbf4d",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "name": "Save UID to flow.context",
+        "func": "let inProgress = flow.get(\"registrationInProgress\") || false;\n\nif (inProgress) {\n    node.warn(\"Registration in progress. UID rejected.\");\n    return null;\n}\n\nflow.set(\"new_uid\", msg.payload);\nflow.set(\"registrationInProgress\", true);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0ba040695f5c0e89",
+        "type": "mysql",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "mydb": "e4ad07fd5ca8d88c",
+        "name": "Save to Database",
+        "x": 650,
+        "y": 80,
+        "wires": [
+            [
+                "c34aee0bfb8dd42b"
+            ]
+        ]
+    },
+    {
+        "id": "c34aee0bfb8dd42b",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "name": "Set new_uid to null",
+        "func": "flow.set(\"new_uid\", null);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e6b0093e50e08ffe",
+        "type": "inject",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "name": "Add scanner here",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 120,
+        "wires": [
+            [
+                "6cabb21c944cbf4d"
+            ]
+        ]
+    },
+    {
+        "id": "fc624bd440cbcd43",
+        "type": "inject",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "name": "Dummy scan in Muhd",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "DS2211",
+        "payloadType": "str",
+        "x": 180,
+        "y": 260,
+        "wires": [
+            [
+                "a31ef3ec9be8b217"
+            ]
+        ]
+    },
+    {
+        "id": "a31ef3ec9be8b217",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "name": "Record scan in",
+        "func": "// Pass data if value isn't empty\nif (msg.payload !== \"\") {\n\n    flow.set(\"uid\", msg.payload);\n\n    const ts_in = Date.now(); // Get the current timestamp (milliseconds)\n    const dateObject = new Date(ts_in);\n\n    const date_in = dateObject.toLocaleString('en-GB', {\n        day: '2-digit',\n        month: '2-digit',\n        year: 'numeric'\n    }); // Full date and time\n    const time_in = dateObject.toLocaleTimeString('en-US', {\n        hour: '2-digit',\n        minute: '2-digit',\n        hour12: true // Use 24-hour format\n    })\n\n    flow.set(\"ts_in\", ts_in);\n    flow.set(\"date_in\", date_in);\n    flow.set(\"time_in\", time_in);\n\n    msg.payload = {\n        value: msg.payload\n    };\n\n    return msg;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 260,
+        "wires": [
+            [
+                "f39a4eebc3301c47"
+            ]
+        ]
+    },
+    {
+        "id": "f39a4eebc3301c47",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "name": "Read db",
+        "func": "msg.topic = \"SELECT * FROM `database` WHERE 1\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 260,
+        "wires": [
+            [
+                "f3adab6956141cf0"
+            ]
+        ]
+    },
+    {
+        "id": "f3adab6956141cf0",
+        "type": "mysql",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "mydb": "e4ad07fd5ca8d88c",
+        "name": "Read db",
+        "x": 720,
+        "y": 260,
+        "wires": [
+            [
+                "9ecf9f4bf80e810b"
+            ]
+        ]
+    },
+    {
+        "id": "9ecf9f4bf80e810b",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "name": "Search for uid in db",
+        "func": "let data = msg.payload;\nlet uid = flow.get(\"uid\");\nlet found = false;\n\nlet date_in = flow.get(\"date_in\");\nlet time_in = flow.get(\"time_in\");\nlet ts_in = flow.get(\"ts_in\");\n\nlet index_no = flow.get(\"scan_index_no\");\n\nif (index_no === undefined) {\n    index_no = 1;\n} else {\n    index_no += 1;\n}\n\nflow.set(\"scan_index_no\", index_no);\n\nfor (let i = 0; i < data.length; i++) {\n    if (data[i].uid &&\n        data[i].uid.toString().trim() === uid.toString().trim()) {\n        msg.payload = {\n            index_no: index_no,\n            comp: data[i].comp,\n            name: data[i].name,\n            staff_id: data[i].staff_id,\n            station: flow.get(\"station\"),\n            uid: uid,\n            date_in: date_in,\n            time_in: time_in,\n            ts_in: ts_in,\n            total_worktime: null,\n            completeRecord: true\n        };\n        found = true;\n        return msg;\n    }\n}\n\nif (!found) {\n    msg.payload = {\n        message: \"No record found for \" + uid,\n        completeRecord: false\n    };\n    flow.set(\"uid\", null);\n    flow.set(\"date_in\", null);\n    flow.set(\"time_in\", null);\n    flow.set(\"ts_in\", null);\n    flow.set(\"date_out\", null);\n    flow.set(\"time_out\", null);\n    flow.set(\"ts_out\", null);\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 890,
+        "y": 260,
+        "wires": [
+            [
+                "4fdffab18ceef923"
+            ]
+        ]
+    },
+    {
+        "id": "4fdffab18ceef923",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "name": "Write scan in",
+        "func": "// Get form data\nvar index_no = msg.payload.index_no;\nvar comp = msg.payload.comp;\nvar name = msg.payload.name;\nvar staff_id = msg.payload.staff_id;\nvar uid = msg.payload.uid;\nvar date_in = msg.payload.date_in;\nvar time_in = msg.payload.time_in;\nvar ts_in = msg.payload.ts_in;\nvar date_out = null;\nvar time_out = null;\nvar ts_out = null;\nvar station = msg.payload.station;\nvar total_worktime = null;\n\n// Build SQL query\nmsg.topic =\n    \"INSERT INTO `attendance`(`index_no`, `comp`, `name`, `staff_id`, `station`, `uid`, `date_in`, `time_in`, `ts_in`, `date_out`, `time_out`, `ts_out`, `total_worktime`) \" +\n    \"VALUES (\"+index_no+\",'\"+comp+\"','\"+name+\"','\"+staff_id+\"','\"+station+\"','\"+uid+\"','\"+date_in+\"','\"+time_in+\"',\"+ts_in+\",'\"+date_out+\"','\"+time_out+\"',\"+ts_out+\",'\"+total_worktime+\"')\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 260,
+        "wires": [
+            [
+                "3f7c1f3c6ebb6dc4"
+            ]
+        ]
+    },
+    {
+        "id": "3f7c1f3c6ebb6dc4",
+        "type": "mysql",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "mydb": "e4ad07fd5ca8d88c",
+        "name": "",
+        "x": 1250,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c0d34e379f1190f4",
+        "type": "inject",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "name": "Dummy scan out Faezah",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "AK8865",
+        "payloadType": "str",
+        "x": 190,
+        "y": 500,
+        "wires": [
+            [
+                "284b0c1b3824a6a7"
+            ]
+        ]
+    },
+    {
+        "id": "284b0c1b3824a6a7",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "name": "Record date_out, time_out, ts_out",
+        "func": "// Pass data if value isn't empty\nif (msg.payload !== \"\") {\n\n    flow.set(\"uid\", msg.payload);\n\n    const ts_out = Date.now(); // Get the current timestamp (milliseconds)\n    const dateObject = new Date(ts_out);\n\n    const date_out = dateObject.toLocaleString('en-GB', {\n        day: '2-digit',\n        month: '2-digit',\n        year: 'numeric'\n    }); // Full date and time\n    const time_out = dateObject.toLocaleTimeString('en-US', {\n        hour: '2-digit',\n        minute: '2-digit',\n        hour12: true // Use 24-hour format\n    })\n\n    flow.set(\"ts_out\", ts_out);\n    flow.set(\"date_out\", date_out);\n    flow.set(\"time_out\", time_out);\n\n    msg.payload = {\n        value: msg.payload\n    };\n\n    return msg;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 460,
+        "wires": [
+            [
+                "ff859b1a28f78936"
+            ]
+        ]
+    },
+    {
+        "id": "2d9b65ee49579e88",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "name": "Read db",
+        "func": "msg.topic = \"SELECT * FROM `database` WHERE 1\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 500,
+        "wires": [
+            [
+                "120edc751dd63376"
+            ]
+        ]
+    },
+    {
+        "id": "120edc751dd63376",
+        "type": "mysql",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "mydb": "e4ad07fd5ca8d88c",
+        "name": "Read db",
+        "x": 600,
+        "y": 500,
+        "wires": [
+            [
+                "7e7188419140bb7e"
+            ]
+        ]
+    },
+    {
+        "id": "6d141c44d71fcfc7",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "name": "Write scan out",
+        "func": "// Get form data\nvar index_no = msg.payload.index_no;\nvar comp = msg.payload.comp;\nvar name = msg.payload.name;\nvar staff_id = msg.payload.staff_id;\nvar station = msg.payload.station;\nvar uid = msg.payload.uid;\nvar date_in = msg.payload.date_in;\nvar time_in = msg.payload.time_in;\nvar ts_in = msg.payload.ts_in;\nvar date_out = msg.payload.date_out;\nvar time_out = msg.payload.time_out;\nvar ts_out = msg.payload.ts_out;\nvar total_worktime = msg.payload.total_worktime;\n\n// Build SQL query\nmsg.topic =\n    \"INSERT INTO `attendance`(`index_no`, `comp`, `name`, `staff_id`, `station`, `uid`, `date_in`, `time_in`, `ts_in`, `date_out`, `time_out`, `ts_out`, `total_worktime`) \" +\n    \"VALUES (\"+index_no+\",'\"+comp+\"','\"+name+\"','\"+staff_id+\"','\"+station+\"','\"+uid+\"','\"+date_in+\"','\"+time_in+\"',\"+ts_in+\",'\"+date_out+\"','\"+time_out+\"',\"+ts_out+\",'\"+total_worktime+\"')\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 500,
+        "wires": [
+            [
+                "cbc0aeab6c4396e5"
+            ]
+        ]
+    },
+    {
+        "id": "cbc0aeab6c4396e5",
+        "type": "mysql",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "mydb": "e4ad07fd5ca8d88c",
+        "name": "",
+        "x": 1150,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b181a0ef80361c0d",
+        "type": "comment",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Register new staff ok",
+        "info": "",
+        "x": 1090,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "98ea49473725ccb4",
+        "type": "comment",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Scan attendance ok",
+        "info": "",
+        "x": 1470,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "69a2d3c2d7b4db12",
+        "type": "comment",
+        "z": "6b13ac8835e1a8dd",
+        "name": "How to add auto skill-up?",
+        "info": "",
+        "x": 1430,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "3e723a63c4336de4",
+        "type": "comment",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Pending key-in actual AF staff info into db",
+        "info": "",
+        "x": 1160,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "787120955b2ad657",
+        "type": "comment",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Add form to select which station",
+        "info": "",
+        "x": 1510,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "704e77cc1a64a4b9",
+        "type": "comment",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Add display of total work time",
+        "info": "",
+        "x": 1440,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "2693245c188115bb",
+        "type": "ui_form",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "name": "Select station",
+        "label": "Station",
+        "group": "8545d7cb029d3f07",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Station",
+                "value": "station",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "station": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "cancel",
+        "topic": "payload",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 160,
+        "y": 340,
+        "wires": [
+            [
+                "b2be051e9eb366d4"
+            ]
+        ]
+    },
+    {
+        "id": "6cfb32b6ac44195b",
+        "type": "ui_text",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "group": "8545d7cb029d3f07",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "name": "Display name",
+        "label": "Name",
+        "format": "{{msg.payload.name}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1240,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "e702800bd9cff3aa",
+        "type": "ui_text",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "group": "8545d7cb029d3f07",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "name": "Display staff_id",
+        "label": "Staff ID",
+        "format": "{{msg.payload.staff_id}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1240,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "83e08dae6465044e",
+        "type": "debug",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "d482a9bd1493aed7",
+        "type": "debug",
+        "z": "6b13ac8835e1a8dd",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1380,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "17854ef3ae2b11bf",
+        "type": "mysql",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "mydb": "e4ad07fd5ca8d88c",
+        "name": "Read attendance",
+        "x": 930,
+        "y": 460,
+        "wires": [
+            [
+                "1f891882c1d1c4b4"
+            ]
+        ]
+    },
+    {
+        "id": "ff859b1a28f78936",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "name": "Read attendance",
+        "func": "msg.topic = \"SELECT * FROM `attendance` WHERE 1\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 460,
+        "wires": [
+            [
+                "17854ef3ae2b11bf"
+            ]
+        ]
+    },
+    {
+        "id": "b2be051e9eb366d4",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "name": "Save station",
+        "func": "flow.set(\"station\", msg.payload);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7e7188419140bb7e",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "name": "Search for uid in db",
+        "func": "let data = msg.payload;\nlet uid = flow.get(\"uid\");\nlet found = false;\n\nlet date_in = flow.get(\"latestMatch.date_in\");\nlet time_in = flow.get(\"latestMatch.time_in\");\nlet ts_in = flow.get(\"latestMatch.ts_in\");\nlet date_out = flow.get(\"date_out\");\nlet time_out = flow.get(\"time_out\");\nlet ts_out = flow.get(\"ts_out\");\nlet ts_difference = ts_out - ts_in;\n\n// Convert milliseconds to total minutes\nlet totalMinutes = Math.floor(ts_difference / 60000); // 1 min = 60000 ms\nlet hours = Math.floor(totalMinutes / 60);\nlet minutes = totalMinutes % 60;\nlet total_worktime = `${hours}h ${minutes}m`;\n\nlet index_no = flow.get(\"scan_index_no\");\n\nif (index_no === undefined) {\n    index_no = 1;\n} else {\n    index_no += 1;\n}\n\nflow.set(\"scan_index_no\", index_no);\n\nfor (let i = 0; i < data.length; i++) {\n    if (data[i].uid &&\n        data[i].uid.toString().trim() === uid.toString().trim()) {\n        msg.payload = {\n            index_no: index_no,\n            comp: data[i].comp,\n            name: data[i].name,\n            staff_id: data[i].staff_id,\n            station: flow.get(\"station\"),\n            uid: uid,\n            date_in: date_in,\n            time_in: time_in,\n            ts_in: ts_in,\n            date_out: date_out,\n            time_out: time_out,\n            ts_out: ts_out,\n            total_worktime: total_worktime,\n            completeRecord: true\n        };\n        found = true;\n        return msg;\n    }\n}\n\nif (!found) {\n    msg.payload = {\n        message: \"No record found for \" + uid,\n        completeRecord: false\n    };\n    flow.set(\"uid\", null);\n    flow.set(\"date_in\", null);\n    flow.set(\"time_in\", null);\n    flow.set(\"ts_in\", null);\n    flow.set(\"date_out\", null);\n    flow.set(\"time_out\", null);\n    flow.set(\"ts_out\", null);\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 500,
+        "wires": [
+            [
+                "6d141c44d71fcfc7"
+            ]
+        ]
+    },
+    {
+        "id": "1f891882c1d1c4b4",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "name": "Search for scan in",
+        "func": "let data = msg.payload;\nlet date_out = flow.get(\"date_out\"); //to search matching date_in and date_out\nlet uid = flow.get(\"uid\"); //to search matching uid\nlet latestMatch = null; //to identify latest ts_in from the matched date_in\nlet found = false;\n\nfor (let i = 0; i < data.length; i++) {\n    if (\n        data[i].uid &&\n        data[i].uid.toString().trim() === uid.toString().trim() &&\n        data[i].date_in === date_out // matching date_in and date_out\n    ) {\n        if (!latestMatch || Number(data[i].ts_in) > Number(latestMatch.ts_in)) {\n            latestMatch = data[i]; //storing row from latest ts_in from matching date_in\n        }\n    }\n}\n\nif (latestMatch) { //matching data will be stored below in context data\n    flow.set(\"latestMatch.time_in\", latestMatch.time_in);\n    flow.set(\"latestMatch.date_in\", latestMatch.date_in);\n    flow.set(\"latestMatch.ts_in\", latestMatch.ts_in);\n    //to add station latest match\n    //completeRecord = true\n    };\nfound = true;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1130,
+        "y": 460,
+        "wires": [
+            [
+                "16fefab51341220e"
+            ]
+        ]
+    },
+    {
+        "id": "8f8ec9d703e71d94",
+        "type": "inject",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "name": "Dummy scan in Faezah",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "AK8865",
+        "payloadType": "str",
+        "x": 180,
+        "y": 300,
+        "wires": [
+            [
+                "a31ef3ec9be8b217"
+            ]
+        ]
+    },
+    {
+        "id": "77b2094b6f18c8d7",
+        "type": "inject",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "name": "Dummy scan in Muhd",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "DS2211",
+        "payloadType": "str",
+        "x": 180,
+        "y": 460,
+        "wires": [
+            [
+                "284b0c1b3824a6a7"
+            ]
+        ]
+    },
+    {
+        "id": "16fefab51341220e",
+        "type": "link out",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "name": "link out 1",
+        "mode": "link",
+        "links": [
+            "3580f2a67c73ed32"
+        ],
+        "x": 1255,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "3580f2a67c73ed32",
+        "type": "link in",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "name": "link in 1",
+        "links": [
+            "16fefab51341220e"
+        ],
+        "x": 365,
+        "y": 500,
+        "wires": [
+            [
+                "2d9b65ee49579e88"
+            ]
+        ]
+    },
+    {
+        "id": "5009149a1ac8863f",
+        "type": "ui_group",
+        "name": "New Staff",
+        "tab": "931bfd0b3f6dfbe5",
+        "order": 1,
+        "disp": true,
+        "width": 18,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "e4ad07fd5ca8d88c",
+        "type": "MySQLdatabase",
+        "z": "6b13ac8835e1a8dd",
+        "name": "",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "smart_attendance",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "8545d7cb029d3f07",
+        "type": "ui_group",
+        "name": "Group 1",
+        "tab": "0c63fc0bc808fbc8",
+        "order": 1,
+        "disp": false,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "931bfd0b3f6dfbe5",
+        "type": "ui_tab",
+        "name": "New for Registration",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "0c63fc0bc808fbc8",
+        "type": "ui_tab",
+        "name": "Newest",
+        "icon": "dashboard",
+        "order": 23,
+        "disabled": false,
+        "hidden": false
+    }
+]
