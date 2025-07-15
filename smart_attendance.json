@@ -25,11 +25,19 @@
             "6cabb21c944cbf4d",
             "0ba040695f5c0e89",
             "c34aee0bfb8dd42b",
-            "e6b0093e50e08ffe"
+            "e6b0093e50e08ffe",
+            "19dcde6414157bf2",
+            "4acc66664627aa2c",
+            "13b52024fee46387",
+            "6c69980c7ed93170",
+            "555074e764b58a85",
+            "9b76d02f56668318",
+            "8568d761288ec384",
+            "aa0e333476f5151f"
         ],
         "x": 34,
         "y": 39,
-        "w": 952,
+        "w": 1342,
         "h": 162
     },
     {
@@ -52,16 +60,16 @@
             "4fdffab18ceef923",
             "3f7c1f3c6ebb6dc4",
             "2693245c188115bb",
-            "6cfb32b6ac44195b",
-            "e702800bd9cff3aa",
-            "83e08dae6465044e",
             "b2be051e9eb366d4",
-            "8f8ec9d703e71d94"
+            "8f8ec9d703e71d94",
+            "f07c7f002a9eedc6",
+            "fecbf34efaad7d6e",
+            "ce81b0db067a48c4"
         ],
         "x": 34,
         "y": 219,
-        "w": 1332,
-        "h": 182
+        "w": 1392,
+        "h": 202
     },
     {
         "id": "bb6a5251438f4241",
@@ -87,28 +95,62 @@
             "1f891882c1d1c4b4",
             "77b2094b6f18c8d7",
             "16fefab51341220e",
-            "3580f2a67c73ed32"
+            "3580f2a67c73ed32",
+            "7d1e0a68f92da408"
         ],
         "x": 34,
-        "y": 419,
-        "w": 1262,
-        "h": 122
+        "y": 439,
+        "w": 1322,
+        "h": 202
+    },
+    {
+        "id": "9134ff1e8f4df087",
+        "type": "group",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Display",
+        "style": {
+            "label": true,
+            "stroke": "#000000",
+            "fill": "#ffffbf",
+            "color": "#000000"
+        },
+        "nodes": [
+            "6cfb32b6ac44195b",
+            "e702800bd9cff3aa",
+            "17b0bba30bd8670c",
+            "5d5efbce5c25aa0f",
+            "fc754e82ce3fc643",
+            "7795bf2fcce5f5e1",
+            "92cb811959aeca37",
+            "3fe55a434aad7218",
+            "656211924f28a659",
+            "f333e31bbdeb0771",
+            "e98c5407facc8e18",
+            "db2b95baaaf50a15",
+            "43fc31be07c5aeec",
+            "7b4cf30cc6d0320a",
+            "06501e5ce69b6c97"
+        ],
+        "x": 34,
+        "y": 659,
+        "w": 542,
+        "h": 362
     },
     {
         "id": "83a42ecb7093007c",
         "type": "function",
         "z": "6b13ac8835e1a8dd",
         "g": "1845049c0e0b030c",
-        "name": "New staff info",
-        "func": "// Get index number or initialize it\nvar index_no = flow.get(\"db_index_no\");\n\nif (index_no == null) {\n    index_no = 1;\n} else {\n    index_no += 1;\n}\n\nflow.set(\"db_index_no\", index_no);\n\n// Get UID from flow context\nvar new_uid = flow.get(\"new_uid\");\n\n// Get form data\nvar comp = msg.payload.comp;\nvar name = msg.payload.name;\nvar email = msg.payload.email;\nvar ic = msg.payload.ic;\nvar staff_id = msg.payload.staff_id;\nvar license_d = msg.payload.license_d;\nvar license_b2 = msg.payload.license_b2;\nvar phone = msg.payload.phone;\n\n// Build SQL query\nmsg.topic =\n    \"INSERT INTO `database`(`index_no`, `comp`, `name`, `email`, `ic`, `staff_id`, `license_d`, `license_b2`, `phone`, `uid`) \" +\n    \"VALUES (\"+index_no+\",'\"+comp+\"','\"+name+\"','\"+email+\"','\"+ic+\"','\"+staff_id+\"',\"+license_d+\",\"+license_b2+\",'\"+phone+\"','\"+new_uid+\"')\";\n\n// Clear UID after use to unlock next scan\n//flow.set(\"uid\", null);\nflow.set(\"registrationInProgress\", false);\n\nreturn msg;",
+        "name": "Search index_no & build SQL",
+        "func": "let data = msg.payload;\nvar index_no = flow.get(\"index_no\");\nvar comp = flow.get(\"comp\");\nvar name = flow.get(\"name\");\nvar email = flow.get(\"email\");\nvar ic = flow.get(\"ic\");\nvar staff_id = flow.get(\"staff_id\");\nvar license_d = flow.get(\"license_d\");\nvar license_b2 = flow.get(\"license_b2\");\nvar phone = flow.get(\"phone\");\nvar password = flow.get(\"password\");\n\n// Get UID from flow context\nvar new_uid = flow.get(\"new_uid\");\n\n// Build SQL query\nmsg.topic =\n    \"INSERT INTO `database`(`index_no`, `comp`, `name`, `email`, `ic`, `staff_id`, `license_d`, `license_b2`, `phone`, `uid`, `password`) \" +\n    \"VALUES (\"+index_no+\",'\"+comp+\"','\"+name+\"','\"+email+\"','\"+ic+\"','\"+staff_id+\"',\"+license_d+\",\"+license_b2+\",'\"+phone+\"','\"+new_uid+\"','\"+password+\"')\";\n\n// Clear UID after use to unlock next scan\nflow.set(\"registrationInProgress\", false);\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 440,
-        "y": 80,
+        "x": 810,
+        "y": 120,
         "wires": [
             [
                 "0ba040695f5c0e89"
@@ -120,8 +162,8 @@
         "type": "ui_form",
         "z": "6b13ac8835e1a8dd",
         "g": "1845049c0e0b030c",
-        "name": "New Staff Form",
-        "label": "New Staff Form",
+        "name": "New staff form",
+        "label": "New Staff Registration",
         "group": "5009149a1ac8863f",
         "order": 1,
         "width": 18,
@@ -182,6 +224,13 @@
                 "type": "text",
                 "required": true,
                 "rows": null
+            },
+            {
+                "label": "Password",
+                "value": "password",
+                "type": "password",
+                "required": true,
+                "rows": null
             }
         ],
         "formValue": {
@@ -192,7 +241,8 @@
             "staff_id": "",
             "license_d": false,
             "license_b2": false,
-            "phone": ""
+            "phone": "",
+            "password": ""
         },
         "payload": "",
         "submit": "submit",
@@ -205,7 +255,7 @@
         "y": 80,
         "wires": [
             [
-                "83a42ecb7093007c"
+                "19dcde6414157bf2"
             ]
         ]
     },
@@ -225,7 +275,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "SA2323",
+        "payload": "QW1234",
         "payloadType": "str",
         "x": 190,
         "y": 160,
@@ -249,7 +299,7 @@
         "finalize": "",
         "libs": [],
         "x": 410,
-        "y": 120,
+        "y": 160,
         "wires": [
             []
         ]
@@ -260,9 +310,9 @@
         "z": "6b13ac8835e1a8dd",
         "g": "1845049c0e0b030c",
         "mydb": "e4ad07fd5ca8d88c",
-        "name": "Save to Database",
-        "x": 650,
-        "y": 80,
+        "name": "Save to database",
+        "x": 1050,
+        "y": 120,
         "wires": [
             [
                 "c34aee0bfb8dd42b"
@@ -275,15 +325,15 @@
         "z": "6b13ac8835e1a8dd",
         "g": "1845049c0e0b030c",
         "name": "Set new_uid to null",
-        "func": "flow.set(\"new_uid\", null);\nreturn msg;",
+        "func": "flow.set(\"new_uid\", null);\nflow.set(\"registrationInProgress\", false);\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 870,
-        "y": 80,
+        "x": 1250,
+        "y": 120,
         "wires": [
             []
         ]
@@ -330,7 +380,8 @@
         "y": 260,
         "wires": [
             [
-                "a31ef3ec9be8b217"
+                "a31ef3ec9be8b217",
+                "f07c7f002a9eedc6"
             ]
         ]
     },
@@ -340,19 +391,17 @@
         "z": "6b13ac8835e1a8dd",
         "g": "8b744031c4387e1c",
         "name": "Record scan in",
-        "func": "// Pass data if value isn't empty\nif (msg.payload !== \"\") {\n\n    flow.set(\"uid\", msg.payload);\n\n    const ts_in = Date.now(); // Get the current timestamp (milliseconds)\n    const dateObject = new Date(ts_in);\n\n    const date_in = dateObject.toLocaleString('en-GB', {\n        day: '2-digit',\n        month: '2-digit',\n        year: 'numeric'\n    }); // Full date and time\n    const time_in = dateObject.toLocaleTimeString('en-US', {\n        hour: '2-digit',\n        minute: '2-digit',\n        hour12: true // Use 24-hour format\n    })\n\n    flow.set(\"ts_in\", ts_in);\n    flow.set(\"date_in\", date_in);\n    flow.set(\"time_in\", time_in);\n\n    msg.payload = {\n        value: msg.payload\n    };\n\n    return msg;\n}",
+        "func": "// Set form active\nflow.set(\"form_enabled\", true);\n\n// Pass data if value isn't empty\nif (msg.payload !== \"\") {\n\n    flow.set(\"uid\", msg.payload);\n\n    const ts_in = Date.now(); // Get the current timestamp (milliseconds)\n    const dateObject = new Date(ts_in);\n\n    const date_in = dateObject.toLocaleString('en-GB', {\n        day: '2-digit',\n        month: '2-digit',\n        year: 'numeric'\n    }); // Full date and time\n    const time_in = dateObject.toLocaleTimeString('en-US', {\n        hour: '2-digit',\n        minute: '2-digit',\n        hour12: true // Use 24-hour format\n    })\n\n    flow.set(\"ts_in\", ts_in);\n    flow.set(\"date_in\", date_in);\n    flow.set(\"time_in\", time_in);\n\n    msg.payload = {\n        value: msg.payload\n    };\n\n    return msg;\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
+        "x": 460,
         "y": 260,
         "wires": [
-            [
-                "f39a4eebc3301c47"
-            ]
+            []
         ]
     },
     {
@@ -368,8 +417,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 580,
-        "y": 260,
+        "x": 600,
+        "y": 340,
         "wires": [
             [
                 "f3adab6956141cf0"
@@ -383,8 +432,8 @@
         "g": "8b744031c4387e1c",
         "mydb": "e4ad07fd5ca8d88c",
         "name": "Read db",
-        "x": 720,
-        "y": 260,
+        "x": 740,
+        "y": 340,
         "wires": [
             [
                 "9ecf9f4bf80e810b"
@@ -397,15 +446,15 @@
         "z": "6b13ac8835e1a8dd",
         "g": "8b744031c4387e1c",
         "name": "Search for uid in db",
-        "func": "let data = msg.payload;\nlet uid = flow.get(\"uid\");\nlet found = false;\n\nlet date_in = flow.get(\"date_in\");\nlet time_in = flow.get(\"time_in\");\nlet ts_in = flow.get(\"ts_in\");\n\nlet index_no = flow.get(\"scan_index_no\");\n\nif (index_no === undefined) {\n    index_no = 1;\n} else {\n    index_no += 1;\n}\n\nflow.set(\"scan_index_no\", index_no);\n\nfor (let i = 0; i < data.length; i++) {\n    if (data[i].uid &&\n        data[i].uid.toString().trim() === uid.toString().trim()) {\n        msg.payload = {\n            index_no: index_no,\n            comp: data[i].comp,\n            name: data[i].name,\n            staff_id: data[i].staff_id,\n            station: flow.get(\"station\"),\n            uid: uid,\n            date_in: date_in,\n            time_in: time_in,\n            ts_in: ts_in,\n            total_worktime: null,\n            completeRecord: true\n        };\n        found = true;\n        return msg;\n    }\n}\n\nif (!found) {\n    msg.payload = {\n        message: \"No record found for \" + uid,\n        completeRecord: false\n    };\n    flow.set(\"uid\", null);\n    flow.set(\"date_in\", null);\n    flow.set(\"time_in\", null);\n    flow.set(\"ts_in\", null);\n    flow.set(\"date_out\", null);\n    flow.set(\"time_out\", null);\n    flow.set(\"ts_out\", null);\n}\n\nreturn msg;",
+        "func": "let data = msg.payload;\nlet uid = flow.get(\"uid\");\nlet found = false;\n\nlet date_in = flow.get(\"date_in\");\nlet time_in = flow.get(\"time_in\");\nlet ts_in = flow.get(\"ts_in\");\n\nlet index_no = flow.get(\"scan_index_no\");\n\nif (index_no === undefined) {\n    index_no = 1;\n} else {\n    index_no += 1;\n}\n\nflow.set(\"scan_index_no\", index_no);\n\nfor (let i = 0; i < data.length; i++) {\n    if (data[i].uid &&\n        data[i].uid.toString().trim() === uid.toString().trim()) {\n        msg.payload = {\n            index_no: index_no,\n            comp: data[i].comp,\n            name: data[i].name,\n            staff_id: data[i].staff_id,\n            uid: uid,\n            date_in: date_in,\n            time_in: time_in,\n            ts_in: ts_in,\n            total_worktime: null,\n            completeRecord: true\n        };\n        found = true;\n        return msg;\n    }\n}\n\nif (!found) {\n    msg.payload = {\n        message: \"No record found for \" + uid,\n        completeRecord: false\n    };\n    flow.set(\"uid\", null);\n    flow.set(\"date_in\", null);\n    flow.set(\"time_in\", null);\n    flow.set(\"ts_in\", null);\n    flow.set(\"date_out\", null);\n    flow.set(\"time_out\", null);\n    flow.set(\"ts_out\", null);\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
-        "y": 260,
+        "x": 910,
+        "y": 340,
         "wires": [
             [
                 "4fdffab18ceef923"
@@ -418,18 +467,19 @@
         "z": "6b13ac8835e1a8dd",
         "g": "8b744031c4387e1c",
         "name": "Write scan in",
-        "func": "// Get form data\nvar index_no = msg.payload.index_no;\nvar comp = msg.payload.comp;\nvar name = msg.payload.name;\nvar staff_id = msg.payload.staff_id;\nvar uid = msg.payload.uid;\nvar date_in = msg.payload.date_in;\nvar time_in = msg.payload.time_in;\nvar ts_in = msg.payload.ts_in;\nvar date_out = null;\nvar time_out = null;\nvar ts_out = null;\nvar station = msg.payload.station;\nvar total_worktime = null;\n\n// Build SQL query\nmsg.topic =\n    \"INSERT INTO `attendance`(`index_no`, `comp`, `name`, `staff_id`, `station`, `uid`, `date_in`, `time_in`, `ts_in`, `date_out`, `time_out`, `ts_out`, `total_worktime`) \" +\n    \"VALUES (\"+index_no+\",'\"+comp+\"','\"+name+\"','\"+staff_id+\"','\"+station+\"','\"+uid+\"','\"+date_in+\"','\"+time_in+\"',\"+ts_in+\",'\"+date_out+\"','\"+time_out+\"',\"+ts_out+\",'\"+total_worktime+\"')\";\n\nreturn msg;",
+        "func": "// Get form data\nvar index_no = msg.payload.index_no;\nvar comp = msg.payload.comp;\nvar name = msg.payload.name;\nvar staff_id = msg.payload.staff_id;\nvar uid = msg.payload.uid;\nvar date_in = msg.payload.date_in;\nvar time_in = msg.payload.time_in;\nvar ts_in = msg.payload.ts_in;\nvar date_out = null;\nvar time_out = null;\nvar ts_out = null;\nvar station = msg.payload.station;\nvar total_worktime = null;\nvar station = flow.get(\"station\");\n\n// Build SQL query\nmsg.topic =\n    \"INSERT INTO `attendance`(`index_no`, `comp`, `name`, `staff_id`, `station`, `uid`, `date_in`, `time_in`, `ts_in`, `date_out`, `time_out`, `ts_out`, `total_worktime`) \" +\n    \"VALUES (\"+index_no+\",'\"+comp+\"','\"+name+\"','\"+staff_id+\"','\"+station+\"','\"+uid+\"','\"+date_in+\"','\"+time_in+\"',\"+ts_in+\",'\"+date_out+\"','\"+time_out+\"',\"+ts_out+\",'\"+total_worktime+\"')\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1070,
-        "y": 260,
+        "x": 1090,
+        "y": 340,
         "wires": [
             [
-                "3f7c1f3c6ebb6dc4"
+                "3f7c1f3c6ebb6dc4",
+                "ce81b0db067a48c4"
             ]
         ]
     },
@@ -440,8 +490,8 @@
         "g": "8b744031c4387e1c",
         "mydb": "e4ad07fd5ca8d88c",
         "name": "",
-        "x": 1250,
-        "y": 260,
+        "x": 1310,
+        "y": 380,
         "wires": [
             []
         ]
@@ -465,7 +515,7 @@
         "payload": "AK8865",
         "payloadType": "str",
         "x": 190,
-        "y": 500,
+        "y": 540,
         "wires": [
             [
                 "284b0c1b3824a6a7"
@@ -485,8 +535,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 480,
-        "y": 460,
+        "x": 500,
+        "y": 480,
         "wires": [
             [
                 "ff859b1a28f78936"
@@ -506,8 +556,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 460,
-        "y": 500,
+        "x": 480,
+        "y": 540,
         "wires": [
             [
                 "120edc751dd63376"
@@ -521,8 +571,8 @@
         "g": "bb6a5251438f4241",
         "mydb": "e4ad07fd5ca8d88c",
         "name": "Read db",
-        "x": 600,
-        "y": 500,
+        "x": 620,
+        "y": 540,
         "wires": [
             [
                 "7e7188419140bb7e"
@@ -542,11 +592,12 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 960,
-        "y": 500,
+        "x": 980,
+        "y": 540,
         "wires": [
             [
-                "cbc0aeab6c4396e5"
+                "cbc0aeab6c4396e5",
+                "7d1e0a68f92da408"
             ]
         ]
     },
@@ -557,21 +608,11 @@
         "g": "bb6a5251438f4241",
         "mydb": "e4ad07fd5ca8d88c",
         "name": "",
-        "x": 1150,
-        "y": 500,
+        "x": 1190,
+        "y": 540,
         "wires": [
             []
         ]
-    },
-    {
-        "id": "b181a0ef80361c0d",
-        "type": "comment",
-        "z": "6b13ac8835e1a8dd",
-        "name": "Register new staff ok",
-        "info": "",
-        "x": 1090,
-        "y": 80,
-        "wires": []
     },
     {
         "id": "98ea49473725ccb4",
@@ -579,8 +620,8 @@
         "z": "6b13ac8835e1a8dd",
         "name": "Scan attendance ok",
         "info": "",
-        "x": 1470,
-        "y": 260,
+        "x": 1530,
+        "y": 240,
         "wires": []
     },
     {
@@ -589,7 +630,7 @@
         "z": "6b13ac8835e1a8dd",
         "name": "How to add auto skill-up?",
         "info": "",
-        "x": 1430,
+        "x": 1490,
         "y": 460,
         "wires": []
     },
@@ -599,28 +640,8 @@
         "z": "6b13ac8835e1a8dd",
         "name": "Pending key-in actual AF staff info into db",
         "info": "",
-        "x": 1160,
-        "y": 120,
-        "wires": []
-    },
-    {
-        "id": "787120955b2ad657",
-        "type": "comment",
-        "z": "6b13ac8835e1a8dd",
-        "name": "Add form to select which station",
-        "info": "",
-        "x": 1510,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "704e77cc1a64a4b9",
-        "type": "comment",
-        "z": "6b13ac8835e1a8dd",
-        "name": "Add display of total work time",
-        "info": "",
-        "x": 1440,
-        "y": 500,
+        "x": 1560,
+        "y": 60,
         "wires": []
     },
     {
@@ -631,9 +652,9 @@
         "name": "Select station",
         "label": "Station",
         "group": "8545d7cb029d3f07",
-        "order": 2,
-        "width": 0,
-        "height": 0,
+        "order": 6,
+        "width": 8,
+        "height": 1,
         "options": [
             {
                 "label": "Station",
@@ -653,7 +674,7 @@
         "topicType": "msg",
         "splitLayout": "",
         "className": "",
-        "x": 160,
+        "x": 200,
         "y": 340,
         "wires": [
             [
@@ -665,11 +686,11 @@
         "id": "6cfb32b6ac44195b",
         "type": "ui_text",
         "z": "6b13ac8835e1a8dd",
-        "g": "8b744031c4387e1c",
+        "g": "9134ff1e8f4df087",
         "group": "8545d7cb029d3f07",
-        "order": 0,
-        "width": 0,
-        "height": 0,
+        "order": 1,
+        "width": 8,
+        "height": 1,
         "name": "Display name",
         "label": "Name",
         "format": "{{msg.payload.name}}",
@@ -679,19 +700,19 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 1240,
-        "y": 320,
+        "x": 220,
+        "y": 700,
         "wires": []
     },
     {
         "id": "e702800bd9cff3aa",
         "type": "ui_text",
         "z": "6b13ac8835e1a8dd",
-        "g": "8b744031c4387e1c",
+        "g": "9134ff1e8f4df087",
         "group": "8545d7cb029d3f07",
-        "order": 0,
-        "width": 0,
-        "height": 0,
+        "order": 2,
+        "width": 8,
+        "height": 1,
         "name": "Display staff_id",
         "label": "Staff ID",
         "format": "{{msg.payload.staff_id}}",
@@ -701,15 +722,14 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 1240,
-        "y": 360,
+        "x": 220,
+        "y": 740,
         "wires": []
     },
     {
         "id": "83e08dae6465044e",
         "type": "debug",
         "z": "6b13ac8835e1a8dd",
-        "g": "8b744031c4387e1c",
         "name": "debug 4",
         "active": true,
         "tosidebar": true,
@@ -718,8 +738,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 860,
-        "y": 300,
+        "x": 1500,
+        "y": 320,
         "wires": []
     },
     {
@@ -734,7 +754,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1380,
+        "x": 1440,
         "y": 540,
         "wires": []
     },
@@ -745,8 +765,8 @@
         "g": "bb6a5251438f4241",
         "mydb": "e4ad07fd5ca8d88c",
         "name": "Read attendance",
-        "x": 930,
-        "y": 460,
+        "x": 990,
+        "y": 480,
         "wires": [
             [
                 "1f891882c1d1c4b4"
@@ -766,8 +786,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 730,
-        "y": 460,
+        "x": 790,
+        "y": 480,
         "wires": [
             [
                 "17854ef3ae2b11bf"
@@ -780,17 +800,19 @@
         "z": "6b13ac8835e1a8dd",
         "g": "8b744031c4387e1c",
         "name": "Save station",
-        "func": "flow.set(\"station\", msg.payload);\n\nreturn msg;",
+        "func": "let station = msg.payload.station;\nflow.set(\"station\", station);\n\nlet enabled = flow.get(\"form_enabled\") || false;\nif (!enabled) {\n    return null; // discard or notify user\n}\nreturn msg; // allow",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 410,
+        "x": 450,
         "y": 340,
         "wires": [
-            []
+            [
+                "f39a4eebc3301c47"
+            ]
         ]
     },
     {
@@ -799,15 +821,15 @@
         "z": "6b13ac8835e1a8dd",
         "g": "bb6a5251438f4241",
         "name": "Search for uid in db",
-        "func": "let data = msg.payload;\nlet uid = flow.get(\"uid\");\nlet found = false;\n\nlet date_in = flow.get(\"latestMatch.date_in\");\nlet time_in = flow.get(\"latestMatch.time_in\");\nlet ts_in = flow.get(\"latestMatch.ts_in\");\nlet date_out = flow.get(\"date_out\");\nlet time_out = flow.get(\"time_out\");\nlet ts_out = flow.get(\"ts_out\");\nlet ts_difference = ts_out - ts_in;\n\n// Convert milliseconds to total minutes\nlet totalMinutes = Math.floor(ts_difference / 60000); // 1 min = 60000 ms\nlet hours = Math.floor(totalMinutes / 60);\nlet minutes = totalMinutes % 60;\nlet total_worktime = `${hours}h ${minutes}m`;\n\nlet index_no = flow.get(\"scan_index_no\");\n\nif (index_no === undefined) {\n    index_no = 1;\n} else {\n    index_no += 1;\n}\n\nflow.set(\"scan_index_no\", index_no);\n\nfor (let i = 0; i < data.length; i++) {\n    if (data[i].uid &&\n        data[i].uid.toString().trim() === uid.toString().trim()) {\n        msg.payload = {\n            index_no: index_no,\n            comp: data[i].comp,\n            name: data[i].name,\n            staff_id: data[i].staff_id,\n            station: flow.get(\"station\"),\n            uid: uid,\n            date_in: date_in,\n            time_in: time_in,\n            ts_in: ts_in,\n            date_out: date_out,\n            time_out: time_out,\n            ts_out: ts_out,\n            total_worktime: total_worktime,\n            completeRecord: true\n        };\n        found = true;\n        return msg;\n    }\n}\n\nif (!found) {\n    msg.payload = {\n        message: \"No record found for \" + uid,\n        completeRecord: false\n    };\n    flow.set(\"uid\", null);\n    flow.set(\"date_in\", null);\n    flow.set(\"time_in\", null);\n    flow.set(\"ts_in\", null);\n    flow.set(\"date_out\", null);\n    flow.set(\"time_out\", null);\n    flow.set(\"ts_out\", null);\n}\n\nreturn msg;",
+        "func": "let data = msg.payload;\nlet uid = flow.get(\"uid\");\nlet found = false;\n\nlet date_in = flow.get(\"latestMatch.date_in\");\nlet time_in = flow.get(\"latestMatch.time_in\");\nlet ts_in = flow.get(\"latestMatch.ts_in\");\nlet date_out = flow.get(\"date_out\");\nlet time_out = flow.get(\"time_out\");\nlet ts_out = flow.get(\"ts_out\");\nlet station = flow.get(\"latestMatch.station\");\nlet ts_difference = ts_out - ts_in;\n\n// Convert milliseconds to total minutes\nlet totalMinutes = Math.floor(ts_difference / 60000); // 1 min = 60000 ms\nlet hours = Math.floor(totalMinutes / 60);\nlet minutes = totalMinutes % 60;\nlet total_worktime = `${hours}h ${minutes}m`;\n\nlet index_no = flow.get(\"scan_index_no\");\n\nif (index_no === undefined) {\n    index_no = 1;\n} else {\n    index_no += 1;\n}\n\nflow.set(\"scan_index_no\", index_no);\n\nfor (let i = 0; i < data.length; i++) {\n    if (data[i].uid &&\n        data[i].uid.toString().trim() === uid.toString().trim()) {\n        msg.payload = {\n            index_no: index_no,\n            comp: data[i].comp,\n            name: data[i].name,\n            staff_id: data[i].staff_id,\n            station: station,\n            uid: uid,\n            date_in: date_in,\n            time_in: time_in,\n            ts_in: ts_in,\n            date_out: date_out,\n            time_out: time_out,\n            ts_out: ts_out,\n            total_worktime: total_worktime,\n            completeRecord: true\n        };\n        found = true;\n        return msg;\n    }\n}\n\nif (!found) {\n    msg.payload = {\n        message: \"No record found for \" + uid,\n        completeRecord: false\n    };\n    flow.set(\"uid\", null);\n    flow.set(\"date_in\", null);\n    flow.set(\"time_in\", null);\n    flow.set(\"ts_in\", null);\n    flow.set(\"date_out\", null);\n    flow.set(\"time_out\", null);\n    flow.set(\"ts_out\", null);\n    flow.set(\"station\", null);\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 770,
-        "y": 500,
+        "x": 790,
+        "y": 540,
         "wires": [
             [
                 "6d141c44d71fcfc7"
@@ -820,15 +842,15 @@
         "z": "6b13ac8835e1a8dd",
         "g": "bb6a5251438f4241",
         "name": "Search for scan in",
-        "func": "let data = msg.payload;\nlet date_out = flow.get(\"date_out\"); //to search matching date_in and date_out\nlet uid = flow.get(\"uid\"); //to search matching uid\nlet latestMatch = null; //to identify latest ts_in from the matched date_in\nlet found = false;\n\nfor (let i = 0; i < data.length; i++) {\n    if (\n        data[i].uid &&\n        data[i].uid.toString().trim() === uid.toString().trim() &&\n        data[i].date_in === date_out // matching date_in and date_out\n    ) {\n        if (!latestMatch || Number(data[i].ts_in) > Number(latestMatch.ts_in)) {\n            latestMatch = data[i]; //storing row from latest ts_in from matching date_in\n        }\n    }\n}\n\nif (latestMatch) { //matching data will be stored below in context data\n    flow.set(\"latestMatch.time_in\", latestMatch.time_in);\n    flow.set(\"latestMatch.date_in\", latestMatch.date_in);\n    flow.set(\"latestMatch.ts_in\", latestMatch.ts_in);\n    //to add station latest match\n    //completeRecord = true\n    };\nfound = true;\nreturn msg;",
+        "func": "let data = msg.payload;\nlet date_out = flow.get(\"date_out\"); //to search matching date_in and date_out\nlet uid = flow.get(\"uid\"); //to search matching uid\nlet latestMatch = null; //to identify latest ts_in from the matched date_in\nlet found = false;\n\nfor (let i = 0; i < data.length; i++) {\n    if (\n        data[i].uid &&\n        data[i].uid.toString().trim() === uid.toString().trim() &&\n        data[i].date_in === date_out // matching date_in and date_out\n    ) {\n        if (!latestMatch || Number(data[i].ts_in) > Number(latestMatch.ts_in)) {\n            latestMatch = data[i]; //storing row from latest ts_in from matching date_in\n        }\n    }\n}\n\nif (latestMatch) { //matching data will be stored below in context data\n    flow.set(\"latestMatch.time_in\", latestMatch.time_in);\n    flow.set(\"latestMatch.date_in\", latestMatch.date_in);\n    flow.set(\"latestMatch.ts_in\", latestMatch.ts_in);\n    flow.set(\"latestMatch.station\", latestMatch.station);\n    //to add station latest match\n    //completeRecord = true\n    };\nfound = true;\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1130,
-        "y": 460,
+        "x": 1190,
+        "y": 480,
         "wires": [
             [
                 "16fefab51341220e"
@@ -857,7 +879,8 @@
         "y": 300,
         "wires": [
             [
-                "a31ef3ec9be8b217"
+                "a31ef3ec9be8b217",
+                "f07c7f002a9eedc6"
             ]
         ]
     },
@@ -880,7 +903,7 @@
         "payload": "DS2211",
         "payloadType": "str",
         "x": 180,
-        "y": 460,
+        "y": 480,
         "wires": [
             [
                 "284b0c1b3824a6a7"
@@ -897,8 +920,8 @@
         "links": [
             "3580f2a67c73ed32"
         ],
-        "x": 1255,
-        "y": 460,
+        "x": 1315,
+        "y": 480,
         "wires": []
     },
     {
@@ -910,13 +933,878 @@
         "links": [
             "16fefab51341220e"
         ],
-        "x": 365,
-        "y": 500,
+        "x": 375,
+        "y": 540,
         "wires": [
             [
                 "2d9b65ee49579e88"
             ]
         ]
+    },
+    {
+        "id": "17b0bba30bd8670c",
+        "type": "ui_text",
+        "z": "6b13ac8835e1a8dd",
+        "g": "9134ff1e8f4df087",
+        "group": "8545d7cb029d3f07",
+        "order": 4,
+        "width": 4,
+        "height": 1,
+        "name": "Display time_in",
+        "label": "Time In",
+        "format": "{{msg.payload.time_in}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 220,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "5d5efbce5c25aa0f",
+        "type": "ui_text",
+        "z": "6b13ac8835e1a8dd",
+        "g": "9134ff1e8f4df087",
+        "group": "8545d7cb029d3f07",
+        "order": 5,
+        "width": 4,
+        "height": 1,
+        "name": "Display time_out",
+        "label": "Time Out",
+        "format": "{{msg.payload.time_out}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 230,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "f07c7f002a9eedc6",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "name": "Enable form",
+        "func": "flow.set(\"form_enabled\", true);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fc754e82ce3fc643",
+        "type": "delay",
+        "z": "6b13ac8835e1a8dd",
+        "g": "9134ff1e8f4df087",
+        "name": "Delay 5 seconds",
+        "pauseType": "delay",
+        "timeout": "3",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 230,
+        "y": 940,
+        "wires": [
+            [
+                "7795bf2fcce5f5e1",
+                "656211924f28a659",
+                "e98c5407facc8e18"
+            ]
+        ]
+    },
+    {
+        "id": "7795bf2fcce5f5e1",
+        "type": "change",
+        "z": "6b13ac8835e1a8dd",
+        "g": "9134ff1e8f4df087",
+        "name": "Clear form",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{}",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "ui_control",
+                "pt": "msg",
+                "to": "{ \"reset\": true }",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 900,
+        "wires": [
+            [
+                "92cb811959aeca37"
+            ]
+        ]
+    },
+    {
+        "id": "92cb811959aeca37",
+        "type": "link out",
+        "z": "6b13ac8835e1a8dd",
+        "g": "9134ff1e8f4df087",
+        "name": "link out 2",
+        "mode": "link",
+        "links": [
+            "fecbf34efaad7d6e"
+        ],
+        "x": 535,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "3fe55a434aad7218",
+        "type": "link in",
+        "z": "6b13ac8835e1a8dd",
+        "g": "9134ff1e8f4df087",
+        "name": "link in 2",
+        "links": [
+            "f333e31bbdeb0771",
+            "7d1e0a68f92da408",
+            "ce81b0db067a48c4"
+        ],
+        "x": 75,
+        "y": 780,
+        "wires": [
+            [
+                "6cfb32b6ac44195b",
+                "e702800bd9cff3aa",
+                "17b0bba30bd8670c",
+                "5d5efbce5c25aa0f",
+                "43fc31be07c5aeec",
+                "7b4cf30cc6d0320a"
+            ]
+        ]
+    },
+    {
+        "id": "fecbf34efaad7d6e",
+        "type": "link in",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "name": "link in 3",
+        "links": [
+            "92cb811959aeca37"
+        ],
+        "x": 75,
+        "y": 340,
+        "wires": [
+            [
+                "2693245c188115bb"
+            ]
+        ]
+    },
+    {
+        "id": "656211924f28a659",
+        "type": "change",
+        "z": "6b13ac8835e1a8dd",
+        "g": "9134ff1e8f4df087",
+        "name": "Clear text",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{ name: \"\", staff_id: \"\", time_in: \"\" }",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 940,
+        "wires": [
+            [
+                "f333e31bbdeb0771"
+            ]
+        ]
+    },
+    {
+        "id": "f333e31bbdeb0771",
+        "type": "link out",
+        "z": "6b13ac8835e1a8dd",
+        "g": "9134ff1e8f4df087",
+        "name": "link out 3",
+        "mode": "link",
+        "links": [
+            "3fe55a434aad7218"
+        ],
+        "x": 535,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "e98c5407facc8e18",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "9134ff1e8f4df087",
+        "name": "Clear all",
+        "func": "flow.set(\"form_enabled\", false);\nflow.set(\"uid\", null);\nflow.set(\"ts_in\", null);\nflow.set(\"date_in\", null);\nflow.set(\"time_in\", null);\nflow.set(\"station\", null);\n// optionally clear scanned staff data\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 980,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "db2b95baaaf50a15",
+        "type": "link in",
+        "z": "6b13ac8835e1a8dd",
+        "g": "9134ff1e8f4df087",
+        "name": "link in 4",
+        "links": [
+            "ce81b0db067a48c4",
+            "7d1e0a68f92da408"
+        ],
+        "x": 75,
+        "y": 940,
+        "wires": [
+            [
+                "fc754e82ce3fc643"
+            ]
+        ]
+    },
+    {
+        "id": "ce81b0db067a48c4",
+        "type": "link out",
+        "z": "6b13ac8835e1a8dd",
+        "g": "8b744031c4387e1c",
+        "name": "link out 4",
+        "mode": "link",
+        "links": [
+            "db2b95baaaf50a15",
+            "3fe55a434aad7218"
+        ],
+        "x": 1235,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "7d1e0a68f92da408",
+        "type": "link out",
+        "z": "6b13ac8835e1a8dd",
+        "g": "bb6a5251438f4241",
+        "name": "link out 5",
+        "mode": "link",
+        "links": [
+            "3fe55a434aad7218",
+            "db2b95baaaf50a15"
+        ],
+        "x": 1115,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "43fc31be07c5aeec",
+        "type": "ui_text",
+        "z": "6b13ac8835e1a8dd",
+        "g": "9134ff1e8f4df087",
+        "group": "8545d7cb029d3f07",
+        "order": 3,
+        "width": 8,
+        "height": 1,
+        "name": "Display station",
+        "label": "Station",
+        "format": "{{msg.payload.station}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 220,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "f85193529d10a57b",
+        "type": "ui_form",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Login",
+        "label": "",
+        "group": "fee3c9684363c400",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Staff ID",
+                "value": "staff_id",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Password",
+                "value": "password",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "staff_id": "",
+            "password": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "cancel",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 750,
+        "y": 740,
+        "wires": [
+            [
+                "aa4e91eca049a869"
+            ]
+        ]
+    },
+    {
+        "id": "aa4e91eca049a869",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Store login credentials",
+        "func": "flow.set(\"staff_id\", msg.payload.staff_id);\nflow.set(\"password\", msg.payload.password);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 740,
+        "wires": [
+            [
+                "5f31b41d9183f73c"
+            ]
+        ]
+    },
+    {
+        "id": "19dcde6414157bf2",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "name": "Store new staff info",
+        "func": "// Check if UID has been scanned\nlet new_uid = flow.get(\"new_uid\");\nlet inProgress = flow.get(\"registrationInProgress\") || false;\n\n// Block if no UID was scanned before form submission\nif (!new_uid) {\n    node.warn(\"UID not scanned. Registration blocked.\");\n    return null;\n}\n\n// Store scanned UID and mark registration as in progress\nflow.set(\"registrationInProgress\", true);\n\n// Store form data\nflow.set(\"comp\", msg.payload.comp);\nflow.set(\"name\", msg.payload.name);\nflow.set(\"email\", msg.payload.email);\nflow.set(\"ic\", msg.payload.ic);\nflow.set(\"staff_id\", msg.payload.staff_id);\nflow.set(\"license_d\", msg.payload.license_d);\nflow.set(\"license_b2\", msg.payload.license_b2);\nflow.set(\"phone\", msg.payload.phone);\nflow.set(\"password\", msg.payload.password);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 80,
+        "wires": [
+            [
+                "6c69980c7ed93170"
+            ]
+        ]
+    },
+    {
+        "id": "4acc66664627aa2c",
+        "type": "mysql",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "mydb": "e4ad07fd5ca8d88c",
+        "name": "Read database",
+        "x": 580,
+        "y": 120,
+        "wires": [
+            [
+                "83a42ecb7093007c"
+            ]
+        ]
+    },
+    {
+        "id": "13b52024fee46387",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "name": "Read table",
+        "func": "msg.topic = \"SELECT * FROM `database` WHERE 1\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1230,
+        "y": 80,
+        "wires": [
+            [
+                "aa0e333476f5151f"
+            ]
+        ]
+    },
+    {
+        "id": "5f31b41d9183f73c",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Read table",
+        "func": "msg.topic = \"SELECT * FROM `database` WHERE 1\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 740,
+        "wires": [
+            [
+                "63c44a461e00e595"
+            ]
+        ]
+    },
+    {
+        "id": "63c44a461e00e595",
+        "type": "mysql",
+        "z": "6b13ac8835e1a8dd",
+        "mydb": "e4ad07fd5ca8d88c",
+        "name": "Read database",
+        "x": 1280,
+        "y": 740,
+        "wires": [
+            [
+                "692464681d34b510"
+            ]
+        ]
+    },
+    {
+        "id": "692464681d34b510",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Check if login credentials match",
+        "func": "let data = msg.payload;  // array of user records from the database\nlet staff_id = flow.get(\"staff_id\");  // from earlier function\nlet password = flow.get(\"password\");  // from earlier function\n\nflow.set(\"login_success\", false);  // always reset before checking\n\nfor (let i = 0; i < data.length; i++) {\n    if (data[i].staff_id &&\n        data[i].staff_id.toString().trim() === staff_id.toString().trim() &&\n        data[i].password === password) {\n        \n        flow.set(\"login_success\", true);\n        flow.set(\"user\", data[i]);  // optional: store full user info\n        return msg;\n    }\n}\n\nreturn null;  // login failed",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1510,
+        "y": 740,
+        "wires": [
+            [
+                "574b3d15b8280d5d"
+            ]
+        ]
+    },
+    {
+        "id": "87f6578831679e68",
+        "type": "ui_table",
+        "z": "6b13ac8835e1a8dd",
+        "name": "",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "columns": [],
+        "outputs": 0,
+        "cts": false,
+        "x": 1330,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "574b3d15b8280d5d",
+        "type": "link out",
+        "z": "6b13ac8835e1a8dd",
+        "name": "link out 6",
+        "mode": "link",
+        "links": [
+            "8a2afa51961ef922"
+        ],
+        "x": 1675,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "8a2afa51961ef922",
+        "type": "link in",
+        "z": "6b13ac8835e1a8dd",
+        "name": "link in 5",
+        "links": [
+            "574b3d15b8280d5d"
+        ],
+        "x": 715,
+        "y": 780,
+        "wires": [
+            [
+                "eb95be80df163c0e"
+            ]
+        ]
+    },
+    {
+        "id": "eeeae14df059c84e",
+        "type": "ui_date_picker",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Select Date",
+        "label": "Choose Date",
+        "group": "f64ed382e020888c",
+        "order": 3,
+        "width": 6,
+        "height": 1,
+        "passthru": true,
+        "topic": "",
+        "topicType": "str",
+        "className": "",
+        "x": 1190,
+        "y": 920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d8441b5aca8dfcbe",
+        "type": "change",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Set Selected Date",
+        "rules": [
+            {
+                "t": "set",
+                "p": "selectedDate",
+                "pt": "flow",
+                "to": "$moment(payload).format('DD/MM/YYYY')",
+                "tot": "jsonata"
+            }
+        ],
+        "x": 310,
+        "y": 1080,
+        "wires": [
+            [
+                "27fe197342fea1c8"
+            ]
+        ]
+    },
+    {
+        "id": "27fe197342fea1c8",
+        "type": "file in",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Read Scan In",
+        "filename": "C:/Users/bs010024/OneDrive - Honda/Documents/MSF/New/scanIn.csv",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "utf8",
+        "allProps": false,
+        "x": 500,
+        "y": 1080,
+        "wires": [
+            [
+                "273ccc4f6d23c842"
+            ]
+        ]
+    },
+    {
+        "id": "273ccc4f6d23c842",
+        "type": "csv",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Parse In CSV",
+        "sep": ",",
+        "hdrin": true,
+        "multi": "mult",
+        "temp": "",
+        "skip": 0,
+        "strings": true,
+        "include_empty_strings": false,
+        "include_null_values": false,
+        "x": 680,
+        "y": 1080,
+        "wires": [
+            [
+                "cb43940f1a7507c6"
+            ]
+        ]
+    },
+    {
+        "id": "cb43940f1a7507c6",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Store Scan In",
+        "func": "flow.set('scanIn', msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 860,
+        "y": 1080,
+        "wires": [
+            [
+                "17b14b2d16c79ad7"
+            ]
+        ]
+    },
+    {
+        "id": "17b14b2d16c79ad7",
+        "type": "file in",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Read Scan Out",
+        "filename": "C:/Users/bs010024/OneDrive - Honda/Documents/MSF/New/scanOut.csv",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "utf8",
+        "allProps": false,
+        "x": 1040,
+        "y": 1080,
+        "wires": [
+            [
+                "3631e2aa9a6d431a"
+            ]
+        ]
+    },
+    {
+        "id": "3631e2aa9a6d431a",
+        "type": "csv",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Parse Out CSV",
+        "sep": ",",
+        "hdrin": true,
+        "multi": "mult",
+        "temp": "",
+        "skip": 0,
+        "strings": true,
+        "include_empty_strings": false,
+        "include_null_values": false,
+        "x": 1220,
+        "y": 1080,
+        "wires": [
+            [
+                "89ebeeea8ef68526"
+            ]
+        ]
+    },
+    {
+        "id": "89ebeeea8ef68526",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Join + Filter + Calculate",
+        "func": "let scanIn = flow.get(\"scanIn\");\nlet scanOut = msg.payload;\nconst selectedDate = flow.get(\"selectedDate\");\nconst targetCompany = \"SL Leader Enterprise\";\n\n// Ensure arrays\nif (!Array.isArray(scanIn)) scanIn = [scanIn].filter(Boolean);\nif (!Array.isArray(scanOut)) scanOut = [scanOut].filter(Boolean);\n\nlet results = [];\n\nscanIn.forEach(inRow => {\n    if (\n        inRow[\"Scan Date In\"] !== selectedDate ||\n        inRow[\"Company\"] !== targetCompany\n    ) return;\n\n    const match = scanOut.find(outRow =>\n        outRow[\"QR ID\"] === inRow[\"QR ID\"] &&\n        outRow[\"Scan Date Out\"] === selectedDate\n    );\n\n    const inTime = parseInt(inRow[\"Scan Timestamp In\"]);\n    const outTime = match ? parseInt(match[\"Scan Timestamp Out\"]) : null;\n\n    const duration = outTime ? ((outTime - inTime) / (1000 * 60 * 60)).toFixed(2) : \"0.00\";\n\n    results.push({\n        Name: inRow[\"Full Name\"],\n        Company: inRow[\"Company\"],\n        Date: selectedDate,\n        TimeIn: inRow[\"Scan Time In\"],\n        TimeOut: match ? match[\"Scan Time Out\"] : \"N/A\",\n        Hours: duration\n    });\n});\n\nmsg.payload = results;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1430,
+        "y": 1080,
+        "wires": [
+            [
+                "b2866fa216d0e48f"
+            ]
+        ]
+    },
+    {
+        "id": "b2866fa216d0e48f",
+        "type": "ui_table",
+        "z": "6b13ac8835e1a8dd",
+        "group": "f64ed382e020888c",
+        "name": "Attendance Table",
+        "order": 6,
+        "width": 24,
+        "height": 8,
+        "columns": [],
+        "outputs": 0,
+        "cts": false,
+        "x": 1650,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "eb95be80df163c0e",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Switch Tab Based on Role",
+        "func": "let user = flow.get(\"user\");\n\nif (!user || !user.role) {\n    node.warn(\"User role not set\");\n    return null;\n}\n\nlet target_tab = \"\";\n\nif (user.role === \"admin\") {\n    target_tab = \"admin_tab\"; // must match the tab name exactly\n} else {\n    target_tab = \"user_tab\";  // must match the tab name exactly\n}\n\nreturn {\n    payload: {\n        tab: target_tab\n    }\n};",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 780,
+        "wires": [
+            [
+                "b4b47392b7f48e2c"
+            ]
+        ]
+    },
+    {
+        "id": "b4b47392b7f48e2c",
+        "type": "ui_ui_control",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Switch Tab",
+        "events": [],
+        "x": 1070,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6c69980c7ed93170",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "name": "Get max index_no",
+        "func": "msg.topic = \"SELECT MAX(index_no) AS max_index FROM `database`\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 80,
+        "wires": [
+            [
+                "555074e764b58a85"
+            ]
+        ]
+    },
+    {
+        "id": "555074e764b58a85",
+        "type": "mysql",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "mydb": "e4ad07fd5ca8d88c",
+        "name": "Read database",
+        "x": 760,
+        "y": 80,
+        "wires": [
+            [
+                "9b76d02f56668318"
+            ]
+        ]
+    },
+    {
+        "id": "9b76d02f56668318",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "name": "Store index_no",
+        "func": "let maxIndex = msg.payload[0].max_index || 0;\nlet index_no = maxIndex + 1;\n\nflow.set(\"index_no\", index_no);\nmsg.payload = index_no;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1040,
+        "y": 80,
+        "wires": [
+            [
+                "13b52024fee46387"
+            ]
+        ]
+    },
+    {
+        "id": "8568d761288ec384",
+        "type": "link in",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "name": "link in 6",
+        "links": [
+            "aa0e333476f5151f"
+        ],
+        "x": 445,
+        "y": 120,
+        "wires": [
+            [
+                "4acc66664627aa2c"
+            ]
+        ]
+    },
+    {
+        "id": "aa0e333476f5151f",
+        "type": "link out",
+        "z": "6b13ac8835e1a8dd",
+        "g": "1845049c0e0b030c",
+        "name": "link out 7",
+        "mode": "link",
+        "links": [
+            "8568d761288ec384"
+        ],
+        "x": 1335,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "7b4cf30cc6d0320a",
+        "type": "ui_text",
+        "z": "6b13ac8835e1a8dd",
+        "g": "9134ff1e8f4df087",
+        "group": "8545d7cb029d3f07",
+        "order": 3,
+        "width": 8,
+        "height": 1,
+        "name": "Display total_worktime",
+        "label": "Station",
+        "format": "{{msg.payload.total_worktime}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 240,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "06501e5ce69b6c97",
+        "type": "comment",
+        "z": "6b13ac8835e1a8dd",
+        "g": "9134ff1e8f4df087",
+        "name": "Add display of total work time",
+        "info": "",
+        "x": 240,
+        "y": 900,
+        "wires": []
     },
     {
         "id": "5009149a1ac8863f",
@@ -947,25 +1835,66 @@
         "tab": "0c63fc0bc808fbc8",
         "order": 1,
         "disp": false,
+        "width": 8,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "fee3c9684363c400",
+        "type": "ui_group",
+        "name": "Login",
+        "tab": "417a52366c03fe4b",
+        "order": 1,
+        "disp": true,
         "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "f64ed382e020888c",
+        "type": "ui_group",
+        "name": "Group 1",
+        "tab": "9464ffe50a25767b",
+        "order": 1,
+        "disp": false,
+        "width": "24",
         "collapse": false,
         "className": ""
     },
     {
         "id": "931bfd0b3f6dfbe5",
         "type": "ui_tab",
-        "name": "New for Registration",
+        "name": "registration",
         "icon": "dashboard",
+        "order": 1,
         "disabled": false,
         "hidden": false
     },
     {
         "id": "0c63fc0bc808fbc8",
         "type": "ui_tab",
-        "name": "Newest",
+        "name": "scan",
         "icon": "dashboard",
-        "order": 23,
+        "order": 2,
         "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "417a52366c03fe4b",
+        "type": "ui_tab",
+        "name": "Dashboard",
+        "icon": "dashboard",
+        "order": 5,
+        "disabled": true,
+        "hidden": false
+    },
+    {
+        "id": "9464ffe50a25767b",
+        "type": "ui_tab",
+        "name": "[Admin] SL Leader Enterprise",
+        "icon": "public",
+        "order": 13,
+        "disabled": true,
         "hidden": false
     }
 ]
