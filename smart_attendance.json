@@ -180,6 +180,42 @@
         "h": 202
     },
     {
+        "id": "scanout_group",
+        "type": "group",
+        "z": "6b13ac8835e1a8dd",
+        "name": "Scan Out with TS Matching & Update",
+        "style": {
+            "label": true,
+            "fill": "#ffefbf",
+            "stroke": "#000000",
+            "color": "#000000"
+        },
+        "nodes": [
+            "inject_fathin",
+            "fn_record_ts_out",
+            "fn_read_staff_db",
+            "mysql_read_staff",
+            "fn_verify_uid",
+            "fn_find_latest_scanin",
+            "mysql_find_latest_scanin",
+            "fn_store_latest_match",
+            "fn_update_scanout",
+            "mysql_update_scanout",
+            "fn_log_success",
+            "mysql_log_action",
+            "c1459a3a31e4c977",
+            "eb535990dfb7bb1a",
+            "96f3339a44ed79a8",
+            "9d15662afb868cf8",
+            "453940467f4285fa",
+            "c46e44161c9e2122"
+        ],
+        "x": 34,
+        "y": 1699,
+        "w": 1452,
+        "h": 222
+    },
+    {
         "id": "83a42ecb7093007c",
         "type": "function",
         "z": "6b13ac8835e1a8dd",
@@ -209,7 +245,7 @@
         "label": "",
         "group": "5009149a1ac8863f",
         "order": 1,
-        "width": 18,
+        "width": 12,
         "height": 1,
         "options": [
             {
@@ -521,6 +557,7 @@
         "id": "c0d34e379f1190f4",
         "type": "inject",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "name": "Dummy scan out Fathin",
         "props": [
@@ -547,6 +584,7 @@
         "id": "284b0c1b3824a6a7",
         "type": "function",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "name": "Record date_out, time_out, ts_out",
         "func": "// Pass data if value isn't empty\nif (msg.payload !== \"\") {\n\n    flow.set(\"uid\", msg.payload);\n\n    const ts_out = Date.now(); // Get the current timestamp (milliseconds)\n    const dateObject = new Date(ts_out);\n\n    const date_out = dateObject.toLocaleString('en-GB', {\n        day: '2-digit',\n        month: '2-digit',\n        year: 'numeric'\n    }); // Full date and time\n    const time_out = dateObject.toLocaleTimeString('en-US', {\n        hour: '2-digit',\n        minute: '2-digit',\n        hour12: true // Use 24-hour format\n    })\n\n    flow.set(\"ts_out\", ts_out);\n    flow.set(\"date_out\", date_out);\n    flow.set(\"time_out\", time_out);\n\n    msg.payload = {\n        value: msg.payload\n    };\n\n    return msg;\n}",
@@ -568,6 +606,7 @@
         "id": "2d9b65ee49579e88",
         "type": "function",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "name": "Read db",
         "func": "msg.topic = \"SELECT * FROM `database` WHERE 1\";\n\nreturn msg;",
@@ -589,6 +628,7 @@
         "id": "120edc751dd63376",
         "type": "mysql",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "mydb": "e4ad07fd5ca8d88c",
         "name": "Read db",
@@ -604,6 +644,7 @@
         "id": "6d141c44d71fcfc7",
         "type": "function",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "name": "Write scan out",
         "func": "// Get form data\nvar index_no = msg.payload.index_no;\nvar comp = msg.payload.comp;\nvar name = msg.payload.name;\nvar staff_id = msg.payload.staff_id;\nvar station = msg.payload.station;\nvar uid = msg.payload.uid;\nvar date_in = msg.payload.date_in;\nvar time_in = msg.payload.time_in;\nvar ts_in = msg.payload.ts_in;\nvar date_out = msg.payload.date_out;\nvar time_out = msg.payload.time_out;\nvar ts_out = msg.payload.ts_out;\nvar total_worktime = msg.payload.total_worktime;\n\n// Build SQL query\nmsg.topic =\n    \"INSERT INTO `attendance`(`index_no`, `comp`, `name`, `staff_id`, `station`, `uid`, `date_in`, `time_in`, `ts_in`, `date_out`, `time_out`, `ts_out`, `total_worktime`) \" +\n    \"VALUES (\"+index_no+\",'\"+comp+\"','\"+name+\"','\"+staff_id+\"','\"+station+\"','\"+uid+\"','\"+date_in+\"','\"+time_in+\"',\"+ts_in+\",'\"+date_out+\"','\"+time_out+\"',\"+ts_out+\",'\"+total_worktime+\"')\";\n\nreturn msg;",
@@ -626,6 +667,7 @@
         "id": "cbc0aeab6c4396e5",
         "type": "mysql",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "mydb": "e4ad07fd5ca8d88c",
         "name": "",
@@ -783,6 +825,7 @@
         "id": "17854ef3ae2b11bf",
         "type": "mysql",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "mydb": "e4ad07fd5ca8d88c",
         "name": "Read attendance",
@@ -798,6 +841,7 @@
         "id": "ff859b1a28f78936",
         "type": "function",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "name": "Read attendance",
         "func": "msg.topic = \"SELECT * FROM `attendance` WHERE 1\";\n\nreturn msg;",
@@ -840,6 +884,7 @@
         "id": "7e7188419140bb7e",
         "type": "function",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "name": "Search for uid in db",
         "func": "let data = msg.payload;\nlet uid = flow.get(\"uid\");\nlet found = false;\n\nlet date_in = flow.get(\"latestMatch.date_in\");\nlet time_in = flow.get(\"latestMatch.time_in\");\nlet ts_in = flow.get(\"latestMatch.ts_in\");\nlet date_out = flow.get(\"date_out\");\nlet time_out = flow.get(\"time_out\");\nlet ts_out = flow.get(\"ts_out\");\nlet station = flow.get(\"latestMatch.station\");\nlet ts_difference = ts_out - ts_in;\n\n// Convert milliseconds to total minutes\nlet totalMinutes = Math.floor(ts_difference / 60000); // 1 min = 60000 ms\nlet hours = Math.floor(totalMinutes / 60);\nlet minutes = totalMinutes % 60;\nlet total_worktime = `${hours}h ${minutes}m`;\n\nlet index_no = flow.get(\"scan_index_no\");\n\nfor (let i = 0; i < data.length; i++) {\n    if (data[i].uid &&\n        data[i].uid.toString().trim() === uid.toString().trim()) {\n        msg.payload = {\n            index_no: index_no,\n            comp: data[i].comp,\n            name: data[i].name,\n            staff_id: data[i].staff_id,\n            station: station,\n            uid: uid,\n            date_in: date_in,\n            time_in: time_in,\n            ts_in: ts_in,\n            date_out: date_out,\n            time_out: time_out,\n            ts_out: ts_out,\n            total_worktime: total_worktime,\n            completeRecord: true\n        };\n        found = true;\n        return msg;\n    }\n}\n\nif (!found) {\n    msg.payload = {\n        message: \"No record found for \" + uid,\n        completeRecord: false\n    };\n    flow.set(\"uid\", null);\n    flow.set(\"date_in\", null);\n    flow.set(\"time_in\", null);\n    flow.set(\"ts_in\", null);\n    flow.set(\"date_out\", null);\n    flow.set(\"time_out\", null);\n    flow.set(\"ts_out\", null);\n    flow.set(\"station\", null);\n}\n\nreturn msg;",
@@ -861,6 +906,7 @@
         "id": "1f891882c1d1c4b4",
         "type": "function",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "name": "Search for scan in",
         "func": "let data = msg.payload;\nlet date_out = flow.get(\"date_out\"); // to search matching date_in and date_out\nlet uid = flow.get(\"uid\"); // to search matching uid\nlet latestMatch = null; // to identify latest ts_in from the matched date_in\nlet found = false;\n\n// Search for latest index_no\nlet last = data[data.length - 1];  // Get last row\nlet last_index = 0;\n\nif (last && last.index_no !== undefined && last.index_no !== null) {\n    last_index = last.index_no;\n}\n\n// Store next index_no in flow context\nlet next_index = last_index + 1;\nflow.set(\"scan_index_no\", next_index);\n\nfor (let i = 0; i < data.length; i++) {\n    if (\n        data[i].uid &&\n        data[i].uid.toString().trim() === uid.toString().trim() &&\n        data[i].date_in === date_out // matching date_in and date_out\n    ) {\n        if (!latestMatch || Number(data[i].ts_in) > Number(latestMatch.ts_in)) {\n            latestMatch = data[i]; //storing row from latest ts_in from matching date_in\n        }\n    }\n}\n\nif (latestMatch) { //matching data will be stored below in context data\n    flow.set(\"latestMatch.time_in\", latestMatch.time_in);\n    flow.set(\"latestMatch.date_in\", latestMatch.date_in);\n    flow.set(\"latestMatch.ts_in\", latestMatch.ts_in);\n    flow.set(\"latestMatch.station\", latestMatch.station);\n    //to add station latest match\n    //completeRecord = true\n    };\nfound = true;\nreturn msg;",
@@ -908,6 +954,7 @@
         "id": "77b2094b6f18c8d7",
         "type": "inject",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "name": "Dummy scan out Muhd",
         "props": [
@@ -934,6 +981,7 @@
         "id": "16fefab51341220e",
         "type": "link out",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "name": "link out 1",
         "mode": "link",
@@ -948,6 +996,7 @@
         "id": "3580f2a67c73ed32",
         "type": "link in",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "name": "link in 1",
         "links": [
@@ -1223,6 +1272,7 @@
         "id": "7d1e0a68f92da408",
         "type": "link out",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "name": "link out 5",
         "mode": "link",
@@ -1880,6 +1930,7 @@
         "id": "e19b419282da05ab",
         "type": "inject",
         "z": "6b13ac8835e1a8dd",
+        "d": true,
         "g": "bb6a5251438f4241",
         "name": "Dummy scan out Syakir",
         "props": [
@@ -2186,7 +2237,7 @@
         "z": "6b13ac8835e1a8dd",
         "g": "1bcb22125fb97029",
         "name": "Read attendance",
-        "func": "msg.topic = \"SELECT * FROM attendance ORDER BY ts_in ASC\";\n\nreturn msg;",
+        "func": "//msg.topic = \"SELECT * FROM attendance ORDER BY ts_in ASC\";\nmsg.topic = \"SELECT * FROM attendance WHERE uid = '${uid}' AND date_out IS NULL ORDER BY ts_in DESC LIMIT 1;\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2277,7 +2328,6 @@
         "name": "link out 9",
         "mode": "link",
         "links": [
-            "38451c655df04dbe",
             "3b114e1a745db221"
         ],
         "x": 1155,
@@ -2291,7 +2341,6 @@
         "g": "1bcb22125fb97029",
         "name": "link in 8",
         "links": [
-            "0cf84b19f4e5d4ab",
             "3158c6aa337a19e9"
         ],
         "x": 375,
@@ -2386,13 +2435,361 @@
         "wires": []
     },
     {
+        "id": "inject_fathin",
+        "type": "inject",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "Dummy scan out Muhd",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "QW1234",
+        "payloadType": "str",
+        "x": 180,
+        "y": 1760,
+        "wires": [
+            [
+                "fn_record_ts_out"
+            ]
+        ]
+    },
+    {
+        "id": "fn_record_ts_out",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "Record date_out, time_out, ts_out",
+        "func": "flow.set(\"uid\", msg.payload);\nconst ts_out = Date.now();\nconst dateObj = new Date(ts_out);\nflow.set(\"ts_out\", ts_out);\nflow.set(\"date_out\", dateObj.toLocaleDateString('en-GB'));\nflow.set(\"time_out\", dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }));\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 1760,
+        "wires": [
+            [
+                "fn_read_staff_db"
+            ]
+        ]
+    },
+    {
+        "id": "fn_read_staff_db",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "Read db",
+        "func": "msg.topic = \"SELECT * FROM `database`\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 1760,
+        "wires": [
+            [
+                "mysql_read_staff"
+            ]
+        ]
+    },
+    {
+        "id": "mysql_read_staff",
+        "type": "mysql",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "mydb": "e4ad07fd5ca8d88c",
+        "name": "Read db",
+        "x": 820,
+        "y": 1760,
+        "wires": [
+            [
+                "fn_verify_uid"
+            ]
+        ]
+    },
+    {
+        "id": "fn_verify_uid",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "Verify UID",
+        "func": "const uid = flow.get(\"uid\");\nconst data = msg.payload;\nif (data.find(row => row.uid === uid)) {\n  return [msg, null];\n} else {\n  msg.topic = `INSERT INTO system_log (timestamp, action_type, uid, message) VALUES (NOW(), 'ScanOut', '${uid}', 'UID not found in staff database')`;\n  return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 1760,
+        "wires": [
+            [
+                "c1459a3a31e4c977"
+            ],
+            [
+                "96f3339a44ed79a8"
+            ]
+        ]
+    },
+    {
+        "id": "fn_find_latest_scanin",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "Find scan_in within 24h",
+        "func": "const ts_out = flow.get(\"ts_out\");\nconst total_worktime = flow.get(\"total_worktime\");\nconst index_no = msg.payload.index_no;\n\nmsg.topic = \"UPDATE `attendance` SET ts_out=${ts_out}, total_worktime='${total_worktime}' WHERE index_no=${index_no}\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 230,
+        "y": 1880,
+        "wires": [
+            [
+                "mysql_find_latest_scanin"
+            ]
+        ]
+    },
+    {
+        "id": "mysql_find_latest_scanin",
+        "type": "mysql",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "mydb": "e4ad07fd5ca8d88c",
+        "name": "Find scan_in",
+        "x": 430,
+        "y": 1880,
+        "wires": [
+            [
+                "fn_store_latest_match"
+            ]
+        ]
+    },
+    {
+        "id": "fn_store_latest_match",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "Store match",
+        "func": "const match = msg.payload[0];\nif (!match) return null;\nflow.set(\"latestMatch\", match);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 1880,
+        "wires": [
+            [
+                "fn_update_scanout"
+            ]
+        ]
+    },
+    {
+        "id": "fn_update_scanout",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "Update scan_in row with scan_out",
+        "func": "const ts_out = flow.get(\"ts_out\");\nconst time_out = flow.get(\"time_out\");\nconst date_out = flow.get(\"date_out\");\nconst match = flow.get(\"latestMatch\");\nconst index_no = match.index_no;\nconst ts_in = Number(match.ts_in);\nconst totalMinutes = Math.floor((ts_out - ts_in) / 60000);\nconst hours = Math.floor(totalMinutes / 60);\nconst minutes = totalMinutes % 60;\nconst total_worktime = `${hours}h ${minutes}m`;\nmsg.topic = \"UPDATE `attendance` SET date_out='${date_out}', time_out='${time_out}', ts_out=${ts_out}, total_worktime='${total_worktime}' WHERE index_no=${index_no}\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 1880,
+        "wires": [
+            [
+                "mysql_update_scanout"
+            ]
+        ]
+    },
+    {
+        "id": "mysql_update_scanout",
+        "type": "mysql",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "mydb": "e4ad07fd5ca8d88c",
+        "name": "Update attendance",
+        "x": 1070,
+        "y": 1880,
+        "wires": [
+            [
+                "fn_log_success"
+            ]
+        ]
+    },
+    {
+        "id": "fn_log_success",
+        "type": "function",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "Log Success",
+        "func": "const uid = flow.get(\"uid\");\nconst match = flow.get(\"latestMatch\");\nmsg.topic = \"INSERT INTO `system_log` (timestamp, action_type, uid, message) VALUES (NOW(), 'ScanOut', '${uid}', 'Updated scan-out for index_no ${match.index_no}')\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1250,
+        "y": 1880,
+        "wires": [
+            [
+                "mysql_log_action"
+            ]
+        ]
+    },
+    {
+        "id": "mysql_log_action",
+        "type": "mysql",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "mydb": "e4ad07fd5ca8d88c",
+        "name": "Log to db",
+        "x": 1400,
+        "y": 1860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c1459a3a31e4c977",
+        "type": "link out",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "link out 12",
+        "mode": "link",
+        "links": [
+            "eb535990dfb7bb1a"
+        ],
+        "x": 1055,
+        "y": 1740,
+        "wires": []
+    },
+    {
+        "id": "eb535990dfb7bb1a",
+        "type": "link in",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "link in 10",
+        "links": [
+            "c1459a3a31e4c977"
+        ],
+        "x": 75,
+        "y": 1880,
+        "wires": [
+            [
+                "fn_find_latest_scanin"
+            ]
+        ]
+    },
+    {
+        "id": "96f3339a44ed79a8",
+        "type": "link out",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "link out 13",
+        "mode": "link",
+        "links": [
+            "9d15662afb868cf8"
+        ],
+        "x": 1055,
+        "y": 1780,
+        "wires": []
+    },
+    {
+        "id": "9d15662afb868cf8",
+        "type": "link in",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "link in 11",
+        "links": [
+            "96f3339a44ed79a8"
+        ],
+        "x": 1305,
+        "y": 1840,
+        "wires": [
+            [
+                "mysql_log_action"
+            ]
+        ]
+    },
+    {
+        "id": "453940467f4285fa",
+        "type": "inject",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "Dummy scan out Fathin",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "AS1234",
+        "payloadType": "str",
+        "x": 180,
+        "y": 1800,
+        "wires": [
+            [
+                "fn_record_ts_out"
+            ]
+        ]
+    },
+    {
+        "id": "c46e44161c9e2122",
+        "type": "inject",
+        "z": "6b13ac8835e1a8dd",
+        "g": "scanout_group",
+        "name": "Dummy scan out Syakir",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "ZX1234",
+        "payloadType": "str",
+        "x": 180,
+        "y": 1840,
+        "wires": [
+            [
+                "fn_record_ts_out"
+            ]
+        ]
+    },
+    {
         "id": "5009149a1ac8863f",
         "type": "ui_group",
         "name": "New Staff Registration",
         "tab": "931bfd0b3f6dfbe5",
         "order": 1,
         "disp": true,
-        "width": 18,
+        "width": 12,
         "collapse": false,
         "className": ""
     },
